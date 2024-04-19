@@ -79,9 +79,14 @@ def memo(func):
   """
   cache = {}
   @functools.lru_cache()
-  def fmemo(*args):
-    res = func(*args)
-    return res
+ def fmemo(*args):
+      cached_res = cache.get(args, None)
+      if cached_res:
+          return cached_res
+      
+      res = func(*args)
+      cache[args] = res
+      return res
 
   fmemo.cache = cache
   return fmemo
